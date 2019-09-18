@@ -41,7 +41,6 @@ public class BookController {
         log.info("findMaxPrice: {}", repository.findMaxPrice());
         log.info("findAllByJPQL: {}", repository.findAllByJPQL());
         log.info("findByPriceHigherThan: {}", repository.findByPriceHigherThan(20));
-
     }
 
     @PostMapping
