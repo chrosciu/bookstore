@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.com.sages.bookstore.dto.BookDto;
+import pl.com.sages.bookstore.dto.BookWithReviewsDto;
 import pl.com.sages.bookstore.dto.NewBookDto;
 import pl.com.sages.bookstore.service.BookService;
 
@@ -42,5 +43,11 @@ public class BookController {
     public void deleteBook(@PathVariable("id") int id) {
         bookService.deleteBook(id);
     }
+
+    @GetMapping("/withReviews")
+    public List<BookWithReviewsDto> getAllBooksWithReviews() {
+        return bookService.getAllBooksWithReviews();
+    }
+
 
 }

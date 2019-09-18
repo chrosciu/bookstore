@@ -6,6 +6,7 @@ import ma.glasnost.orika.metadata.TypeFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.BookDto;
+import pl.com.sages.bookstore.dto.BookWithReviewsDto;
 import pl.com.sages.bookstore.dto.NewBookDto;
 import pl.com.sages.bookstore.model.Book;
 import pl.com.sages.bookstore.repository.BookRepository;
@@ -43,5 +44,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(int id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookWithReviewsDto> getAllBooksWithReviews() {
+        return bookRepository.findAllWithReviews().stream().map(bookWithReviews -> mapperFacade.map(bookWithReviews, BookWithReviewsDto.class)).collect(toList());
     }
 }
