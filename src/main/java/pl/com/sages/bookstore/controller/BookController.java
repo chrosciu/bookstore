@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.com.sages.bookstore.model.Book;
 import pl.com.sages.bookstore.repository.BookRepository;
 
+import java.util.Random;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/books")
 @Slf4j
@@ -24,8 +27,10 @@ public class BookController {
     @PostMapping
     public void createBook() {
         var book = Book.builder()
-                .title("Wladca pierscieni").author("Tolkien")
-                .price(70).rating(10)
+                .title(UUID.randomUUID().toString())
+                .author(UUID.randomUUID().toString())
+                .price(new Random().nextInt(100))
+                .rating(new Random().nextInt(50))
                 .build();
         var savedBook = repository.save(book);
         log.info("Saved book: {}", savedBook);
