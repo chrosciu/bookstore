@@ -31,6 +31,14 @@ public class BookController {
         log.info("getAllBooks: {}", repository.findAll());
     }
 
+    @GetMapping("/queries")
+    @Transactional(readOnly = true)
+    public void queries() {
+        log.info("getAllBooksForAuthor: {}", repository.findByAuthor("Mickiewicz"));
+        log.info("getAllBooksWithRatingBetween: {}", repository.findByRatingBetween(0, 100));
+        log.info("findByRating: {}", repository.findFirstByRating(28).orElse(null));
+    }
+
     @PostMapping
     public void createBook() {
         var book = Book.builder()
