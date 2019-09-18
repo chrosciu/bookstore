@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.com.sages.bookstore.model.Book;
+import pl.com.sages.bookstore.model.Review;
 import pl.com.sages.bookstore.repository.BookRepository;
 import pl.com.sages.bookstore.repository.ReviewRepository;
 
@@ -108,6 +109,20 @@ public class BookController {
     @GetMapping("/{id}/reviews")
     public void getAllReviewsForBook(@PathVariable("id") int id) {
         log.info("{}", reviewRepository.findByBookId(id));
+    }
+
+    @PostMapping("/{id}/reviews")
+    public void createReviewForBook(@PathVariable("id") int id) {
+        var book = bookRepository.findById(id);
+        book.ifPresentOrElse(b -> {
+            var review = Review.builder()
+                    .description(UUID.randomUUID().toString())
+                    .rating(new Random().nextInt(50))
+                    .book(b)
+                    .build();
+            var savedReview = reviewRepository.save(review);
+            log.info("Saved review: {}", savedReview);
+        }, () -> log.info("Book with id: {} does not exist", id));
     }
 
 }
