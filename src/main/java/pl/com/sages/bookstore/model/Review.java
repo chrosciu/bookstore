@@ -2,6 +2,7 @@ package pl.com.sages.bookstore.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "reviews")
-@Getter
-@Setter
-@ToString
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

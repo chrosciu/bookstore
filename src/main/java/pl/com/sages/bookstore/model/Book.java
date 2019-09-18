@@ -20,10 +20,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "books")
-//@Data //probably interfers with equals and hash code
-@Getter
-@Setter
-@ToString
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
