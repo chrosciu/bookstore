@@ -10,16 +10,10 @@ import pl.com.sages.bookstore.repository.BookRepository;
 @SpringBootApplication
 @RequiredArgsConstructor
 @Slf4j
-public class BookstoreApplication implements CommandLineRunner {
+public class BookstoreApplication {
 	private final BookRepository bookRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookstoreApplication.class, args);
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		var books = bookRepository.findAll();
-		log.info("{}", books);
 	}
 }
