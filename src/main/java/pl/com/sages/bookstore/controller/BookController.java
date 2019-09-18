@@ -35,6 +35,7 @@ public class BookController {
     @Transactional(readOnly = true)
     public void queries() {
         log.info("getAllBooksForAuthor: {}", repository.findByAuthor("Mickiewicz"));
+        log.info("countBooksForAuthor: {}", repository.countAllByAuthor("Mickiewicz"));
         log.info("getAllBooksWithRatingBetween: {}", repository.findByRatingBetween(0, 100));
         log.info("findByRating: {}", repository.findFirstByRating(28).orElse(null));
     }

@@ -14,4 +14,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findByRatingBetween(int from, int to);
 
     Optional<Book> findFirstByRating(int rating);
+
+    int countAllByAuthor(String author);
 }
