@@ -2,6 +2,7 @@ package pl.com.sages.bookstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,12 @@ import java.util.function.Consumer;
 @RequestMapping("/books")
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class BookController {
     private final BookRepository repository;
 
     @GetMapping
+    @Transactional(readOnly = true)
     public void getAllBooks() {
         log.info("getAllBooks: {}", repository.findAll());
     }
@@ -38,6 +41,33 @@ public class BookController {
                 .build();
         var savedBook = repository.save(book);
         log.info("Saved book: {}", savedBook);
+    }
+
+    @PostMapping("/withUnchecked")
+    public void createBookWithUncheckedException() {
+        var book = Book.builder()
+                .title(UUID.randomUUID().toString())
+                .author(UUID.randomUUID().toString())
+                .price(new Random().nextInt(100))
+                .rating(new Random().nextInt(50))
+                .build();
+        var savedBook = repository.save(book);
+        log.info("Saved book: {}", savedBook);
+        throw new IllegalStateException("Bo tak");
+    }
+
+    @PostMapping("/withChecked")
+    @Transactional(rollbackFor = Exception.class)
+    public void createBookWithCheckedException() throws Exception {
+        var book = Book.builder()
+                .title(UUID.randomUUID().toString())
+                .author(UUID.randomUUID().toString())
+                .price(new Random().nextInt(100))
+                .rating(new Random().nextInt(50))
+                .build();
+        var savedBook = repository.save(book);
+        log.info("Saved book: {}", savedBook);
+        throw new Exception("Bo tak");
     }
 
     @PutMapping("/{id}")
