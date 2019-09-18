@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.com.sages.bookstore.model.Book;
@@ -13,6 +14,7 @@ import pl.com.sages.bookstore.repository.BookRepository;
 
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/books")
@@ -38,7 +40,15 @@ public class BookController {
         log.info("Saved book: {}", savedBook);
     }
 
-
+    @PutMapping("/{id}")
+    public void updateBook(@PathVariable("id") int id) {
+        var optionalBook = repository.findById(id);
+        optionalBook.ifPresentOrElse(book -> {
+            book.setPrice(book.getPrice() + 1);
+            var updatedBook = repository.save(book);
+            log.info("Updated book: {}", updatedBook);
+        }, () -> log.info("Book with id: {} does not exist", id));
+    }
 
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable("id") int id) {
