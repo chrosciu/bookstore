@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.com.sages.bookstore.model.Book;
 import pl.com.sages.bookstore.repository.BookRepository;
+import pl.com.sages.bookstore.repository.ReviewRepository;
 
 import java.util.Random;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/books")
@@ -23,24 +23,25 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 @Transactional
 public class BookController {
-    private final BookRepository repository;
+    private final BookRepository bookRepository;
+    private final ReviewRepository reviewRepository;
 
     @GetMapping
     @Transactional(readOnly = true)
     public void getAllBooks() {
-        log.info("getAllBooks: {}", repository.findAll());
+        log.info("getAllBooks: {}", bookRepository.findAll());
     }
 
     @GetMapping("/queries")
     @Transactional(readOnly = true)
     public void queries() {
-        log.info("getAllBooksForAuthor: {}", repository.findByAuthor("Mickiewicz"));
-        log.info("countBooksForAuthor: {}", repository.countAllByAuthor("Mickiewicz"));
-        log.info("getAllBooksWithRatingBetween: {}", repository.findByRatingBetween(0, 100));
-        log.info("findByRating: {}", repository.findFirstByRating(28).orElse(null));
-        log.info("findMaxPrice: {}", repository.findMaxPrice());
-        log.info("findAllByJPQL: {}", repository.findAllByJPQL());
-        log.info("findByPriceHigherThan: {}", repository.findByPriceHigherThan(20));
+        log.info("getAllBooksForAuthor: {}", bookRepository.findByAuthor("Mickiewicz"));
+        log.info("countBooksForAuthor: {}", bookRepository.countAllByAuthor("Mickiewicz"));
+        log.info("getAllBooksWithRatingBetween: {}", bookRepository.findByRatingBetween(0, 100));
+        log.info("findByRating: {}", bookRepository.findFirstByRating(28).orElse(null));
+        log.info("findMaxPrice: {}", bookRepository.findMaxPrice());
+        log.info("findAllByJPQL: {}", bookRepository.findAllByJPQL());
+        log.info("findByPriceHigherThan: {}", bookRepository.findByPriceHigherThan(20));
     }
 
     @PostMapping
@@ -51,7 +52,7 @@ public class BookController {
                 .price(new Random().nextInt(100))
                 .rating(new Random().nextInt(50))
                 .build();
-        var savedBook = repository.save(book);
+        var savedBook = bookRepository.save(book);
         log.info("Saved book: {}", savedBook);
     }
 
@@ -63,7 +64,7 @@ public class BookController {
                 .price(new Random().nextInt(100))
                 .rating(new Random().nextInt(50))
                 .build();
-        var savedBook = repository.save(book);
+        var savedBook = bookRepository.save(book);
         log.info("Saved book: {}", savedBook);
         throw new IllegalStateException("Bo tak");
     }
@@ -77,31 +78,36 @@ public class BookController {
                 .price(new Random().nextInt(100))
                 .rating(new Random().nextInt(50))
                 .build();
-        var savedBook = repository.save(book);
+        var savedBook = bookRepository.save(book);
         log.info("Saved book: {}", savedBook);
         throw new Exception("Bo tak");
     }
 
     @PutMapping("/{id}")
     public void updateBook(@PathVariable("id") int id) {
-        var optionalBook = repository.findById(id);
+        var optionalBook = bookRepository.findById(id);
         optionalBook.ifPresentOrElse(book -> {
             book.setPrice(book.getPrice() + 1);
             log.info("Updated book: {}", book);
-            //WARNING: Book will be saven even without call to repository.save !!!
-            //var updatedBook = repository.save(book);
+            //WARNING: Book will be saven even without call to bookRepository.save !!!
+            //var updatedBook = bookRepository.save(book);
             //log.info("Updated book: {}", updatedBook);
         }, () -> log.info("Book with id: {} does not exist", id));
     }
 
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable("id") int id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
+        if (bookRepository.existsById(id)) {
+            bookRepository.deleteById(id);
             log.info("Book with id: {} deleted", id);
         } else {
             log.info("Book with id: {} does not exist", id);
         }
+    }
+
+    @GetMapping("/{id}/reviews")
+    public void getAllReviewsForBook(@PathVariable("id") int id) {
+        log.info("{}", reviewRepository.findByBookId(id));
     }
 
 }
