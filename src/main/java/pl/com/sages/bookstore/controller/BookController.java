@@ -2,7 +2,9 @@ package pl.com.sages.bookstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +36,18 @@ public class BookController {
                 .build();
         var savedBook = repository.save(book);
         log.info("Saved book: {}", savedBook);
+    }
+
+
+
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable("id") int id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            log.info("Book with id: {} deleted", id);
+        } else {
+            log.info("Book with id: {} does not exist", id);
+        }
     }
 
 }
