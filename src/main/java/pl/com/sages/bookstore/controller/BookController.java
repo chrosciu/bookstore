@@ -17,6 +17,7 @@ import pl.com.sages.bookstore.repository.ReviewRepository;
 
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/books")
@@ -44,6 +45,16 @@ public class BookController {
         log.info("findAllByJPQL: {}", bookRepository.findAllByJPQL());
         log.info("findByPriceHigherThan: {}", bookRepository.findByPriceHigherThan(20));
     }
+
+    @GetMapping("/booksWithReviews")
+    @Transactional(readOnly = true)
+    public void booksWithReviews() {
+        var books = bookRepository.findAllWithReviews();
+        log.info("Books: {}", books);
+        var reviews = books.stream().flatMap(book -> book.getReviews().stream()).collect(Collectors.toList());
+        log.info("Reviews: {}", reviews);
+    }
+
 
     @PostMapping
     public void createBook() {

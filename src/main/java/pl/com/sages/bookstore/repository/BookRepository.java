@@ -26,4 +26,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     @Query(value = "select * from books b where b.price >= :fromPrice", nativeQuery = true)
     List<Book> findByPriceHigherThan(int fromPrice);
+
+    @Query("from Book b left join fetch b.reviews")
+    List<Book> findAllWithReviews();
 }
