@@ -38,6 +38,10 @@ public class BookController {
         log.info("countBooksForAuthor: {}", repository.countAllByAuthor("Mickiewicz"));
         log.info("getAllBooksWithRatingBetween: {}", repository.findByRatingBetween(0, 100));
         log.info("findByRating: {}", repository.findFirstByRating(28).orElse(null));
+        log.info("findMaxPrice: {}", repository.findMaxPrice());
+        log.info("findAllByJPQL: {}", repository.findAllByJPQL());
+        log.info("findByPriceHigherThan: {}", repository.findByPriceHigherThan(20));
+
     }
 
     @PostMapping

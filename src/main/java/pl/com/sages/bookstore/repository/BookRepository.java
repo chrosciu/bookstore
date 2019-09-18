@@ -1,6 +1,7 @@
 package pl.com.sages.bookstore.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.com.sages.bookstore.model.Book;
 
@@ -16,4 +17,13 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Optional<Book> findFirstByRating(int rating);
 
     int countAllByAuthor(String author);
+
+    @Query("select max(b.price) from Book b")
+    int findMaxPrice();
+
+    @Query("from Book")
+    List<Book> findAllByJPQL();
+
+    @Query(value = "select * from books b where b.price >= :fromPrice", nativeQuery = true)
+    List<Book> findByPriceHigherThan(int fromPrice);
 }
