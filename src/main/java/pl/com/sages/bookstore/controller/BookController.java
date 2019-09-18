@@ -75,8 +75,10 @@ public class BookController {
         var optionalBook = repository.findById(id);
         optionalBook.ifPresentOrElse(book -> {
             book.setPrice(book.getPrice() + 1);
-            var updatedBook = repository.save(book);
-            log.info("Updated book: {}", updatedBook);
+            log.info("Updated book: {}", book);
+            //WARNING: Book will be saven even without call to repository.save !!!
+            //var updatedBook = repository.save(book);
+            //log.info("Updated book: {}", updatedBook);
         }, () -> log.info("Book with id: {} does not exist", id));
     }
 
