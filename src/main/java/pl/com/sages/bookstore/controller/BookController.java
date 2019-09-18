@@ -15,6 +15,7 @@ import pl.com.sages.bookstore.dto.BookWithReviewsDto;
 import pl.com.sages.bookstore.dto.NewBookDto;
 import pl.com.sages.bookstore.service.BookService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,12 +31,12 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody NewBookDto newBook) {
+    public BookDto createBook(@RequestBody @Valid NewBookDto newBook) {
         return bookService.createBook(newBook);
     }
 
     @PutMapping("/{id}")
-    public BookDto updateBook(@PathVariable("id") int id, @RequestBody NewBookDto newBook) {
+    public BookDto updateBook(@PathVariable("id") int id, @RequestBody @Valid NewBookDto newBook) {
         return bookService.updateBook(id, newBook);
     }
 
