@@ -10,8 +10,8 @@ import java.util.List;
 @Component
 public class BookStoreUserDetailsService implements UserDetailsService {
 
-    private static final BookUserDetails JASIO = new BookUserDetails("jasio", "jasio");
-    private static final BookUserDetails MALGOSIA = new BookUserDetails("malgosia", "malgosia");
+    private static final BookUserDetails JASIO = new BookUserDetails("jasio", "jasio", true);
+    private static final BookUserDetails MALGOSIA = new BookUserDetails("malgosia", "malgosia", false);
     private static final List<BookUserDetails> userDetails = List.of(JASIO, MALGOSIA);
 
     @Override

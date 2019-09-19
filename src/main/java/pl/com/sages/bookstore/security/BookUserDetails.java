@@ -11,10 +11,13 @@ import java.util.Collections;
 public class BookUserDetails implements UserDetails {
     private final String username;
     private final String password;
+    private final boolean admin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return admin ?
+                Collections.singletonList((GrantedAuthority) () -> "ROLE_ADMIN") :
+                Collections.emptyList();
     }
 
     @Override

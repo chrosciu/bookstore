@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.metadata.TypeFactory;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.BookDto;
@@ -35,6 +36,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto createBook(NewBookDto newBookDto) {
         var book = mapperFacade.map(newBookDto, Book.class);
         var savedBook = bookRepository.save(book);
@@ -42,6 +44,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto updateBook(int id, NewBookDto newBookDto) {
         var book = bookRepository.getOne(id);
         //mapperFacade.map(newBookDto, book); //does not work due to proxy around Book
@@ -51,6 +54,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteBook(int id) {
         bookRepository.deleteById(id);
     }
