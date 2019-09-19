@@ -1,7 +1,6 @@
 package pl.com.sages.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Primary
+//@Primary
 @RequiredArgsConstructor
 public class JdbcTemplateBookServiceImpl implements BookService {
     private final JdbcTemplate jdbcTemplate;
