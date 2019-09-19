@@ -10,6 +10,8 @@ import lombok.ToString;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,6 +37,10 @@ public class Book {
     private String title;
     private Integer rating;
     private Integer price;
+
+    @Column(name = "book_type")
+    @Enumerated(EnumType.STRING)
+    private BookType type;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     @ToString.Exclude //do not use related entity in toString() method

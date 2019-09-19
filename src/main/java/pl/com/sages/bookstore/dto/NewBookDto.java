@@ -2,6 +2,7 @@ package pl.com.sages.bookstore.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import pl.com.sages.bookstore.model.BookType;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -22,4 +23,6 @@ public class NewBookDto {
     @Min(0)
     @NotNull
     private Integer price;
+    @NotNull
+    private BookType type;
 }

@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.NewBookDto;
 import pl.com.sages.bookstore.model.Book;
+import pl.com.sages.bookstore.model.BookType;
 import pl.com.sages.bookstore.repository.BookRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,6 +68,7 @@ public class BookstoreApplicationTests {
                 .author("Krasinski")
                 .price(40)
                 .rating(60)
+                .type(BookType.NEW)
                 .build();
         var newBookDtoJson = objectMapper.writeValueAsString(newBookDto);
         MvcResult result = mvc.perform(post("/books").contentType("application/json").content(newBookDtoJson))
@@ -85,6 +87,7 @@ public class BookstoreApplicationTests {
                 .author("Krasinski")
                 .price(40)
                 .rating(60)
+                .type(BookType.NEW)
                 .build();
         var newBookDtoJson = objectMapper.writeValueAsString(newBookDto);
         mvc.perform(post("/books").contentType("application/json").content(newBookDtoJson))
