@@ -2,6 +2,7 @@ package pl.com.sages.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.BookDto;
@@ -20,20 +21,21 @@ import static java.util.stream.Collectors.toList;
 @Transactional
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final MapperFacade mapperFacade;
 
     @Override
     @Transactional(readOnly = true)
     public List<BookDto> getAllBooks() {
         var books = bookRepository.findAll();
-        var bookDtos = books.stream().map(this::map).collect(toList());
+        var bookDtos = books.stream().map(book -> mapperFacade.map(book, BookDto.class)).collect(toList());
         return bookDtos;
     }
 
     @Override
     public BookDto createBook(NewBookDto newBookDto) {
-        var book = mapNew(newBookDto);
+        var book = mapperFacade.map(newBookDto, Book.class);
         var savedBook = bookRepository.save(book);
-        return map(savedBook);
+        return mapperFacade.map(savedBook, BookDto.class);
     }
 
     @Override
@@ -58,6 +60,7 @@ public class BookServiceImpl implements BookService {
         }
     }
 
+    /*
     private BookDto map(Book book) {
         var bookDto = new BookDto();
         bookDto.setId(book.getId());
@@ -76,4 +79,5 @@ public class BookServiceImpl implements BookService {
         book.setRating(newBookDto.getRating());
         return book;
     }
+     */
 }
