@@ -5,13 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.BookDto;
+import pl.com.sages.bookstore.dto.NewBookDto;
 import pl.com.sages.bookstore.model.Book;
 import pl.com.sages.bookstore.repository.BookRepository;
 import pl.com.sages.bookstore.service.BookService;
 
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -31,15 +30,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void createBook() {
-        var book = Book.builder()
-                .title(UUID.randomUUID().toString())
-                .author(UUID.randomUUID().toString())
-                .price(new Random().nextInt(100))
-                .rating(new Random().nextInt(50))
-                .build();
+    public BookDto createBook(NewBookDto newBookDto) {
+        var book = mapNew(newBookDto);
         var savedBook = bookRepository.save(book);
-        log.info("Saved book: {}", savedBook);
+        return map(savedBook);
     }
 
     @Override
@@ -65,12 +59,21 @@ public class BookServiceImpl implements BookService {
     }
 
     private BookDto map(Book book) {
-        BookDto bookDto = new BookDto();
+        var bookDto = new BookDto();
         bookDto.setId(book.getId());
         bookDto.setAuthor(book.getAuthor());
         bookDto.setTitle(book.getTitle());
         bookDto.setPrice(book.getPrice());
         bookDto.setRating(book.getRating());
         return bookDto;
+    }
+
+    private Book mapNew(NewBookDto newBookDto) {
+        var book = new Book();
+        book.setAuthor(newBookDto.getAuthor());
+        book.setTitle(newBookDto.getTitle());
+        book.setPrice(newBookDto.getPrice());
+        book.setRating(newBookDto.getRating());
+        return book;
     }
 }
