@@ -52,12 +52,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(int id) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.deleteById(id);
-            log.info("Book with id: {} deleted", id);
-        } else {
-            log.info("Book with id: {} does not exist", id);
-        }
+        bookRepository.deleteById(id);
     }
 
     /*
