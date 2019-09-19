@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.metadata.TypeFactory;
 import org.hibernate.cfg.NotYetImplementedException;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -20,7 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Primary
+//@Primary
 @Slf4j
 public class TransactionRollbackNotificationBookServiceImpl implements BookService {
     private final BookRepository bookRepository;

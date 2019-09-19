@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.metadata.TypeFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.BookDto;
@@ -20,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
+@Primary
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final MapperFacade mapperFacade;
