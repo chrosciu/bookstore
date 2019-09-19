@@ -1,6 +1,7 @@
 package pl.com.sages.bookstore.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 @RequiredArgsConstructor
+@ToString
 public class BookUserDetails implements UserDetails {
     private final String username;
     private final String password;

@@ -1,6 +1,8 @@
 package pl.com.sages.bookstore.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +21,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 @RequiredArgsConstructor
+@Slf4j
 public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<BookDto> getAllBooks() {
+    public List<BookDto> getAllBooks(Authentication authentication) {
+        log.info("currentUser: {}", authentication.getPrincipal());
         return bookService.getAllBooks();
     }
 
