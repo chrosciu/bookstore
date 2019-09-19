@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.sages.bookstore.dto.BookDto;
 import pl.com.sages.bookstore.model.Book;
 import pl.com.sages.bookstore.repository.BookRepository;
 import pl.com.sages.bookstore.service.BookService;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +24,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public void getAllBooks() {
-        log.info("getAllBooks: {}", bookRepository.findAll());
+    public List<BookDto> getAllBooks() {
+        var books = bookRepository.findAll();
+        var bookDtos = books.stream().map(this::map).collect(toList());
+        return bookDtos;
     }
 
     @Override
@@ -56,5 +62,15 @@ public class BookServiceImpl implements BookService {
         } else {
             log.info("Book with id: {} does not exist", id);
         }
+    }
+
+    private BookDto map(Book book) {
+        BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
+        bookDto.setAuthor(book.getAuthor());
+        bookDto.setTitle(book.getTitle());
+        bookDto.setPrice(book.getPrice());
+        bookDto.setRating(book.getRating());
+        return bookDto;
     }
 }

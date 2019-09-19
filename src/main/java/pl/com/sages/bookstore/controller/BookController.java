@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.com.sages.bookstore.dto.BookDto;
 import pl.com.sages.bookstore.service.BookService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/books")
@@ -17,8 +20,8 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public void getAllBooks() {
-        bookService.getAllBooks();
+    public List<BookDto> getAllBooks() {
+        return bookService.getAllBooks();
     }
 
     @PostMapping

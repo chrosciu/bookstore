@@ -1,8 +1,12 @@
 package pl.com.sages.bookstore.service;
 
+import pl.com.sages.bookstore.dto.BookDto;
+
+import java.util.List;
+
 public interface BookService {
 
-    void getAllBooks();
+    List<BookDto> getAllBooks();
 
     void createBook();
 
