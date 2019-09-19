@@ -3,6 +3,7 @@ package pl.com.sages.bookstore.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.metadata.TypeFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.BookDto;
@@ -39,15 +40,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void updateBook(int id) {
-        var optionalBook = bookRepository.findById(id);
-        optionalBook.ifPresentOrElse(book -> {
-            book.setPrice(book.getPrice() + 1);
-            log.info("Updated book: {}", book);
-            //WARNING: Book will be saven even without call to bookRepository.save !!!
-            //var updatedBook = bookRepository.save(book);
-            //log.info("Updated book: {}", updatedBook);
-        }, () -> log.info("Book with id: {} does not exist", id));
+    public BookDto updateBook(int id, NewBookDto newBookDto) {
+        var book = bookRepository.getOne(id);
+        //mapperFacade.map(newBookDto, book); //does not work due to proxy around Book
+        mapperFacade.map(newBookDto, book, null, TypeFactory.valueOf(Book.class));
+        var savedBook = bookRepository.save(book);
+        return mapperFacade.map(savedBook, BookDto.class);
     }
 
     @Override
