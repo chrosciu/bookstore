@@ -13,6 +13,7 @@ import pl.com.sages.bookstore.dto.BookDto;
 import pl.com.sages.bookstore.dto.NewBookDto;
 import pl.com.sages.bookstore.service.BookService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto createBook(@RequestBody NewBookDto newBookDto) {
+    public BookDto createBook(@Valid @RequestBody NewBookDto newBookDto) {
         return bookService.createBook(newBookDto);
     }
 
