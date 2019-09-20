@@ -17,6 +17,7 @@ import pl.com.sages.bookstore.repository.BookRepository;
 import pl.com.sages.bookstore.service.BookService;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -33,7 +34,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     public List<BookDto> getAllBooks() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("currentUser: {}", authentication.getPrincipal());
+        log.info("currentUser: {}", Optional.ofNullable(authentication).map(Authentication::getPrincipal).orElse(null));
         var books = bookRepository.findAll();
         var bookDtos = books.stream().map(book -> mapperFacade.map(book, BookDto.class)).collect(toList());
         return bookDtos;
