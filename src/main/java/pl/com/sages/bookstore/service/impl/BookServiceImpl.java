@@ -6,8 +6,6 @@ import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.metadata.TypeFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.BookDto;
@@ -32,8 +30,8 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public List<BookDto> getAllBooks() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("currentUser: {}", authentication.getPrincipal());
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //log.info("currentUser: {}", authentication.getPrincipal());
         var books = bookRepository.findAll();
         var bookDtos = books.stream().map(book -> mapperFacade.map(book, BookDto.class)).collect(toList());
         return bookDtos;
