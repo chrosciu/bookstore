@@ -12,10 +12,10 @@ import pl.com.sages.bookstore.service.impl.BookRatingServiceImpl;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
 @RunWith(JUnitParamsRunner.class)
@@ -28,24 +28,39 @@ public class BookRatingServiceImplTest {
         bookRatingService = new BookRatingServiceImpl();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldThrowExceptionForNullBook() {
         log.info("Inside test");
-        var rating = bookRatingService.getMaxRating(null);
+        check();
+        assertThatThrownBy(() -> bookRatingService.getMaxRating(null))
+                .isInstanceOf(IllegalArgumentException.class);
+        /*
+        try {
+            var rating = bookRatingService.getMaxRating(null);
+            Assert.fail();
+        } catch (IllegalArgumentException e) {
+        }
+         */
+    }
+
+    private void check() {
+        //throw new IllegalArgumentException();
     }
 
     @Test
     public void shouldReturnEmptyResultForNoReviews() {
         var book = Book.builder().reviews(null).build();
         var rating = bookRatingService.getMaxRating(book);
-        assertEquals(rating, Optional.empty());
+        assertThat(rating).isEmpty();
+        //assertEquals(rating, Optional.empty());
     }
 
     @Test
     public void shouldReturnEmptyResultForEmptyReviews() {
         var book = Book.builder().reviews(Collections.emptyList()).build();
         var rating = bookRatingService.getMaxRating(book);
-        assertEquals(rating, Optional.empty());
+        assertThat(rating).isEmpty();
+        //assertEquals(rating, Optional.empty());
     }
 
     //duplicated with paramterized one
@@ -60,13 +75,14 @@ public class BookRatingServiceImplTest {
         var rating = bookRatingService.getMaxRating(book);
 
         //then
-        assertEquals(rating, Optional.of(7));
+        assertThat(rating).contains(7);
+        //assertEquals(rating, Optional.of(7));
     }
 
 
     @Test
     @Parameters(method = "paramsForRatingCalculation")
-    public void shouldGetMaxRatingIfThereAreAnyParameterized(List<Integer> ratings, Optional<Integer> expected) {
+    public void shouldGetMaxRatingIfThereAreAnyParameterized(List<Integer> ratings, int expected) {
         //given
         var reviews = ratings.stream().map(r -> Review.builder().rating(r).build()).collect(toList());
         var book = Book.builder().reviews(reviews).build();
@@ -75,13 +91,14 @@ public class BookRatingServiceImplTest {
         var rating = bookRatingService.getMaxRating(book);
 
         //then
-        assertEquals(rating, expected);
+        assertThat(rating).contains(expected);
+        //assertEquals(rating, expected);
     }
 
     private Object paramsForRatingCalculation() {
         return new Object[] { //each array element represents data for one test run
-                new Object[] {List.of(1, 4, 7, 6), Optional.of(7)},
-                new Object[] {List.of(1, 4, 6), Optional.of(6)}
+                new Object[] {List.of(1, 4, 7, 6), 7},
+                new Object[] {List.of(1, 4, 6), 6}
         };
     }
 
