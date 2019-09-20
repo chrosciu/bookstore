@@ -38,7 +38,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto createBook(NewBookDto newBookDto) {
         var book = mapperFacade.map(newBookDto, Book.class);
         var savedBook = bookRepository.save(book);
