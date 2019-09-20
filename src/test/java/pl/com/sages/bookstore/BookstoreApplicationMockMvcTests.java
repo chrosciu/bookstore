@@ -18,6 +18,7 @@ import pl.com.sages.bookstore.repository.BookRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -66,6 +67,16 @@ public class BookstoreApplicationMockMvcTests {
         int id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
         var book = bookRepository.getOne(id);
         assertThat(book).isNotNull();
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void shouldDeleteBookFromDatabase() throws Exception {
+        var books = bookRepository.findAll();
+        var id = books.get(0).getId();
+        mvc.perform(delete("/books/" + id))
+                .andExpect(status().isOk());
+        assertThat(bookRepository.existsById(id)).isFalse();
     }
 
 }
