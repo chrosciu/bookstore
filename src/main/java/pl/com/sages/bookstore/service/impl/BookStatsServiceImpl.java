@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.function.Predicate.not;
+
 @Service
 public class BookStatsServiceImpl implements BookStatsService {
     @Override
@@ -29,6 +31,14 @@ public class BookStatsServiceImpl implements BookStatsService {
 
     @Override
     public boolean hasAnyDescription(Book book) {
-        return false;
+        var reviews = Optional.ofNullable(book).map(Book::getReviews).orElse(null);
+        if (null == reviews) {
+            return false;
+        }
+        return reviews.stream()
+                .filter(Objects::nonNull)
+                .map(Review::getDescription)
+                .filter(Objects::nonNull)
+                .anyMatch(not(String::isEmpty));
     }
 }
