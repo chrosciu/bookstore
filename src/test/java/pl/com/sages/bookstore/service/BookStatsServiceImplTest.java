@@ -10,9 +10,12 @@ import pl.com.sages.bookstore.model.Book;
 import pl.com.sages.bookstore.model.Review;
 import pl.com.sages.bookstore.service.impl.BookStatsServiceImpl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -100,6 +103,75 @@ public class BookStatsServiceImplTest {
                 new Object[] {List.of(1, 4, 7, 6), 7},
                 new Object[] {List.of(1, 4, 6), 6}
         };
+    }
+
+
+    @Test
+    public void shouldReturnThatThereAreNoDescriptionsForNullBook() {
+        //when
+        var isAnyDescription = bookStatsService.hasAnyDescription(null);
+
+        //then
+        assertThat(isAnyDescription).isFalse();
+    }
+
+    @Test
+    public void shouldReturnThatThereAreNoDescriptionsForBookWithNoReviews() {
+        //given
+        var book = Book.builder().reviews(null).build();
+
+        //when
+        var isAnyDescription = bookStatsService.hasAnyDescription(book);
+
+        //then
+        assertThat(isAnyDescription).isFalse();
+    }
+
+    @Test
+    @Parameters(method = "paramsForNotEmptyDescriptionsTest")
+    public void shouldReturnTrueIfThereIsAtLeastOneNotEmptyDescription(List<String> descriptions) {
+        //given
+        var reviews = descriptions.stream().map(d -> Review.builder().description(d).build()).collect(toList());
+        var book = Book.builder().reviews(reviews).build();
+
+        //when
+        var isAnyDescription = bookStatsService.hasAnyDescription(book);
+
+        //then
+        assertThat(isAnyDescription).isTrue();
+    }
+
+    private Object paramsForNotEmptyDescriptionsTest() {
+        return new Object[] { //each array element represents data for one test run
+                new Object[] {buildList("AAA", null, "", "BBB")},
+                new Object[] {buildList("XXX")}
+        };
+    }
+
+    @Test
+    @Parameters(method = "paramsForEmptyDescriptionsTest")
+    public void shouldReturnFalseIfThereAreEmptyDescriptionsOnly(List<String> descriptions, boolean expected) {
+        //given
+        var reviews = descriptions.stream().map(d -> Review.builder().description(d).build()).collect(toList());
+        var book = Book.builder().reviews(reviews).build();
+
+        //when
+        var isAnyDescription = bookStatsService.hasAnyDescription(book);
+
+        //then
+        assertThat(isAnyDescription).isEqualTo(expected);
+    }
+
+    private Object paramsForEmptyDescriptionsTest() {
+        return new Object[] { //each array element represents data for one test run
+                new Object[] {buildList(null, "")},
+                new Object[] {buildList()}
+        };
+    }
+
+    /* allows to create list with null values */
+    private static List<String> buildList(String... args) {
+        return Arrays.stream(args).collect(toCollection(ArrayList::new));
     }
 
 }
