@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import pl.com.sages.bookstore.model.Book;
 import pl.com.sages.bookstore.model.Review;
-import pl.com.sages.bookstore.service.impl.BookRatingServiceImpl;
+import pl.com.sages.bookstore.service.impl.BookStatsServiceImpl;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,24 +19,24 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
 @RunWith(JUnitParamsRunner.class)
-public class BookRatingServiceImplTest {
+public class BookStatsServiceImplTest {
 
-    BookRatingService bookRatingService = null;
+    BookStatsService bookStatsService = null;
 
     @Before
     public void init() {
-        bookRatingService = new BookRatingServiceImpl();
+        bookStatsService = new BookStatsServiceImpl();
     }
 
     @Test
     public void shouldThrowExceptionForNullBook() {
         log.info("Inside test");
         check();
-        assertThatThrownBy(() -> bookRatingService.getMaxRating(null))
+        assertThatThrownBy(() -> bookStatsService.getMaxRating(null))
                 .isInstanceOf(IllegalArgumentException.class);
         /*
         try {
-            var rating = bookRatingService.getMaxRating(null);
+            var rating = bookStatsService.getMaxRating(null);
             Assert.fail();
         } catch (IllegalArgumentException e) {
         }
@@ -50,7 +50,7 @@ public class BookRatingServiceImplTest {
     @Test
     public void shouldReturnEmptyResultForNoReviews() {
         var book = Book.builder().reviews(null).build();
-        var rating = bookRatingService.getMaxRating(book);
+        var rating = bookStatsService.getMaxRating(book);
         assertThat(rating).isEmpty();
         //assertEquals(rating, Optional.empty());
     }
@@ -58,7 +58,7 @@ public class BookRatingServiceImplTest {
     @Test
     public void shouldReturnEmptyResultForEmptyReviews() {
         var book = Book.builder().reviews(Collections.emptyList()).build();
-        var rating = bookRatingService.getMaxRating(book);
+        var rating = bookStatsService.getMaxRating(book);
         assertThat(rating).isEmpty();
         //assertEquals(rating, Optional.empty());
     }
@@ -72,7 +72,7 @@ public class BookRatingServiceImplTest {
         var book = Book.builder().reviews(reviews).build();
 
         //when
-        var rating = bookRatingService.getMaxRating(book);
+        var rating = bookStatsService.getMaxRating(book);
 
         //then
         assertThat(rating).contains(7);
@@ -88,7 +88,7 @@ public class BookRatingServiceImplTest {
         var book = Book.builder().reviews(reviews).build();
 
         //when
-        var rating = bookRatingService.getMaxRating(book);
+        var rating = bookStatsService.getMaxRating(book);
 
         //then
         assertThat(rating).contains(expected);

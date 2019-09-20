@@ -3,14 +3,14 @@ package pl.com.sages.bookstore.service.impl;
 import org.springframework.stereotype.Service;
 import pl.com.sages.bookstore.model.Book;
 import pl.com.sages.bookstore.model.Review;
-import pl.com.sages.bookstore.service.BookRatingService;
+import pl.com.sages.bookstore.service.BookStatsService;
 
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class BookRatingServiceImpl implements BookRatingService {
+public class BookStatsServiceImpl implements BookStatsService {
     @Override
     public Optional<Integer> getMaxRating(Book book) {
         if (null == book) {

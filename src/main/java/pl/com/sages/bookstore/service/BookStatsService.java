@@ -4,6 +4,6 @@ import pl.com.sages.bookstore.model.Book;
 
 import java.util.Optional;
 
-public interface BookRatingService {
+public interface BookStatsService {
     Optional<Integer> getMaxRating(Book book);
 }
