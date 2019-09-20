@@ -14,6 +14,7 @@ import pl.com.sages.bookstore.service.impl.BookServiceImpl;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -29,6 +30,7 @@ public class BookServiceImplTest {
     private static final BookDto SOME_BOOK_DTO = BookDto.builder().title("A").build();
     private static final BookDto SOME_OTHER_BOOK_DTO = BookDto.builder().title("B").build();
     private static final NewBookDto SOME_NEW_BOOK_DTO = new NewBookDto();
+    private static final int SOME_ID = 7;
 
     @Before
     public void init() {
@@ -75,6 +77,15 @@ public class BookServiceImplTest {
 
         //then
         assertThat(book).isEqualTo(SOME_BOOK_DTO);
+    }
+
+    @Test
+    public void shouldDeleteBookWithGivenIdFromRepo() {
+        //when
+        bookService.deleteBook(SOME_ID);
+
+        //then
+        Mockito.verify(bookRepository, times(1)).deleteById(SOME_ID);
     }
 
 
