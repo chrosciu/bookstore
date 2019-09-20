@@ -26,4 +26,9 @@ public class BookStatsServiceImpl implements BookStatsService {
                 .filter(Objects::nonNull)
                 .max(Comparator.comparingInt(r -> r));
     }
+
+    @Override
+    public boolean hasAnyDescription(Book book) {
+        return false;
+    }
 }

@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface BookStatsService {
     Optional<Integer> getMaxRating(Book book);
+
+    boolean hasAnyDescription(Book book);
 }
