@@ -150,7 +150,7 @@ public class BookStatsServiceImplTest {
 
     @Test
     @Parameters(method = "paramsForEmptyDescriptionsTest")
-    public void shouldReturnFalseIfThereAreEmptyDescriptionsOnly(List<String> descriptions, boolean expected) {
+    public void shouldReturnFalseIfThereAreEmptyDescriptionsOnly(List<String> descriptions) {
         //given
         var reviews = descriptions.stream().map(d -> Review.builder().description(d).build()).collect(toList());
         var book = Book.builder().reviews(reviews).build();
@@ -159,7 +159,7 @@ public class BookStatsServiceImplTest {
         var isAnyDescription = bookStatsService.hasAnyDescription(book);
 
         //then
-        assertThat(isAnyDescription).isEqualTo(expected);
+        assertThat(isAnyDescription).isFalse();
     }
 
     private Object paramsForEmptyDescriptionsTest() {
