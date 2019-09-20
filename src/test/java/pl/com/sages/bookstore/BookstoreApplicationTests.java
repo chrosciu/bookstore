@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.sages.bookstore.dto.BookDto;
@@ -50,6 +51,7 @@ public class BookstoreApplicationTests {
 	}
 
 	@Test
+	@WithMockUser(roles = "ADMIN")
 	public void shouldCreateAndGetNewBook(){
 		//when
 		var bookDto = bookService.createBook(SOME_NEW_BOOK_DTO);
